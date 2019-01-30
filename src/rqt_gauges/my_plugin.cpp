@@ -14,6 +14,19 @@ void MyPlugin::newDataCallback(const std_msgs::Float64& msg)
   mSpeedNeedle_-> setCurrentValue(msg.data);
 }
 
+void MyPlugin::colorTopicCallback(const std_msgs::Float64& msg)
+{
+  if ((msg.data >= 0.0) &&(msg.data < 0.5)) {
+    mSpeedNeedle_-> label()->setColor(Qt::black);
+  }
+  if ((msg.data >= 0.5) &&(msg.data < 1.5)) {
+    mSpeedNeedle_-> label()->setColor(Qt::yellow);
+  }
+  if ((msg.data >= 1.5) &&(msg.data < 2.5)) {
+    mSpeedNeedle_-> label()->setColor(Qt::red);
+  }
+}
+
 // Constructor is called first before initPlugin function, needless to say.
 MyPlugin::MyPlugin()
   : rqt_gui_cpp::Plugin()
@@ -117,11 +130,16 @@ void MyPlugin::initPlugin(qt_gui_cpp::PluginContext& context)
   std::string topicName;
   getNodeHandle().getParam("topic"+gaugeNum, topicName);
   needleSub_ = getNodeHandle().subscribe (topicName, 1, &rqt_gauges::MyPlugin::newDataCallback, this);
+  if (!getNodeHandle().hasParam("colorTopic"+gaugeNum)){
+    getNodeHandle().getParam("colorTopic"+gaugeNum, topicName);
+    colorSub_ = getNodeHandle().subscribe (topicName, 1, &rqt_gauges::MyPlugin::colorTopicCallback, this);
+  }
 }
 
 void MyPlugin::shutdownPlugin()
 {
   needleSub_.shutdown();
+  colorSub_.shutdown();
 }
 
 void MyPlugin::saveSettings(qt_gui_cpp::Settings& plugin_settings, qt_gui_cpp::Settings& instance_settings) const

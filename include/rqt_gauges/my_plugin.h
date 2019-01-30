@@ -18,6 +18,7 @@ public:
   MyPlugin();
   virtual void initPlugin(qt_gui_cpp::PluginContext& context);
   void newDataCallback(const std_msgs::Float64& msg);
+  void colorTopicCallback(const std_msgs::Float64& msg);
   virtual void restoreSettings(const qt_gui_cpp::Settings& plugin_settings, const qt_gui_cpp::Settings& instance_settings);
   virtual void saveSettings(qt_gui_cpp::Settings& plugin_settings, qt_gui_cpp::Settings& instance_settings) const;
   virtual void shutdownPlugin();
@@ -31,6 +32,7 @@ private:
   QcGaugeWidget* mSpeedGauge_;
   QcNeedleItem *mSpeedNeedle_;
   ros::Subscriber needleSub_;
+  ros::Subscriber colorSub_;
 };
 }  // namespace rqt_gauges
 #endif  // rqt_gauges_my_plugin_H

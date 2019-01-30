@@ -281,6 +281,7 @@ public:
     void setColor(const QColor & color);
     QColor color();
 
+    void setLabelColor(const QColor& color);
     void setLabel(QcLabelItem*);
     QcLabelItem * label();
 
